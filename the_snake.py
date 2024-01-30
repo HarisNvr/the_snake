@@ -147,7 +147,7 @@ class Snake(GameObject):
 
     def reset(self):
         """
-        'Soft' game restart - snake length reduces to 1
+        Soft game restart - snake length reduces to 1
         and reset its position to default value
         """
         self.length = 1
