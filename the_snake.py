@@ -152,7 +152,7 @@ class Snake(GameObject):
 
 
 def main():
-    '''Gamebody'''
+    '''Game body'''
     running = True
     clock.tick(SPEED)
 
