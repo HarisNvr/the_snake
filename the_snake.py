@@ -62,7 +62,7 @@ def handle_keys(game_object):
 
 # Тут опишите все классы игры.ю
 class GameObject:
-    """Base game class"""
+    """Base game object class"""
 
     def __init__(self, body_color=None):
         """GameObject class constructor"""
