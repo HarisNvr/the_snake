@@ -6,7 +6,7 @@ import pygame
 pygame.init()
 
 # Константы для размеров поля и сетки:
-SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
+SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 720
 SCREEN_CENTER = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
@@ -93,7 +93,7 @@ class Snake(GameObject):
     def __init__(self, body_color=SNAKE_COLOR):
         super().__init__(body_color)
         self.length = 1
-        self.positions = [SCREEN_CENTER]
+        self.positions = [self.position]
         self.direction = RIGHT
         self.next_direction = None
 
@@ -104,19 +104,23 @@ class Snake(GameObject):
 
     def move(self):
         snake_x, snake_y = self.get_head_position()
-        new_snake_x = snake_x + self.direction[0] * GRID_SIZE
-        new_snake_y = snake_y + self.direction[1] * GRID_SIZE
+        new_snake_x = (snake_x + self.direction[0] * GRID_SIZE) % SCREEN_WIDTH
+        new_snake_y = (snake_y + self.direction[1] * GRID_SIZE) % SCREEN_HEIGHT
         self.positions.insert(0, (new_snake_x, new_snake_y))
         if len(self.positions) > self.length:
             self.positions.pop()
 
     def draw(self, surface):
-        for position in self.positions[:-1]:
+        for position in self.positions:
             rect = (
                 pygame.Rect((position[0], position[1]), (GRID_SIZE, GRID_SIZE))
             )
             pygame.draw.rect(surface, self.body_color, rect)
             pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
+
+        head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
+        pygame.draw.rect(surface, self.body_color, head_rect)
+        pygame.draw.rect(surface, BORDER_COLOR, head_rect, 1)
 
     def get_head_position(self):
         return self.positions[0]
@@ -128,23 +132,33 @@ class Snake(GameObject):
 
 
 def main():
-    screen.fill(BOARD_BACKGROUND_COLOR)
+    running = True
+    clock.tick(SPEED)
 
     apple = Apple()
     snake = Snake()
 
-    while True:
-        apple.draw(screen)
-        snake.draw(screen)
+    while running:
+        clock.tick(SPEED)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                raise SystemExit
+        handle_keys(snake)
+        snake.move()
+
+        # Основная логика игры.
+        if apple.position == snake.positions[0]:
+            snake.length += 1
+            apple.randomize_position()
+
+        if snake.get_head_position() in snake.positions[1:]:
+            snake.reset()
+
+        snake.update_direction()
+        screen.fill(BOARD_BACKGROUND_COLOR)
+
+        snake.draw(screen)
+        apple.draw(screen)
 
         pygame.display.update()
-
-        clock.tick(SPEED)
 
 
 if __name__ == '__main__':
