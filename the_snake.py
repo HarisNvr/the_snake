@@ -65,7 +65,7 @@ class GameObject:
     """Base game object class"""
 
     def __init__(self, body_color=None):
-        """GameObject class constructor"""
+        """Parent class constructor"""
         self.position = SCREEN_CENTER
         self.body_color = body_color
 
@@ -75,7 +75,7 @@ class GameObject:
 
 
 class Apple(GameObject):
-    """Game class of "eatable" apples"""
+    """Game class of 'eatable' apples"""
 
     def __init__(self, body_color=APPLE_COLOR):
         """Apple class constructor"""
@@ -146,8 +146,8 @@ class Snake(GameObject):
         return self.positions[0]
 
     def reset(self):
-        """"
-        Soft" game restart - snake length reduces to 1
+        """
+        'Soft' game restart - snake length reduces to 1
         and reset its position to default value
         """
         self.length = 1
