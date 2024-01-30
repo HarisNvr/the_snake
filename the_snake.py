@@ -117,8 +117,10 @@ class Snake(GameObject):
             self.next_direction = None
 
     def move(self):
-        """Insert tuple with X,Y cords into positions list
-        and pop the last value"""
+        """
+        Insert tuple with X,Y cords into positions list
+        and pop the last value
+        """
         snake_x, snake_y = self.get_head_position()
         new_snake_x = (snake_x + self.direction[0] * GRID_SIZE) % SCREEN_WIDTH
         new_snake_y = (snake_y + self.direction[1] * GRID_SIZE) % SCREEN_HEIGHT
@@ -144,8 +146,10 @@ class Snake(GameObject):
         return self.positions[0]
 
     def reset(self):
-        """"Soft" game restart - snake length reduces to 1
-        and reset its position to default value"""
+        """"
+        Soft" game restart - snake length reduces to 1
+        and reset its position to default value
+        """
         self.length = 1
         self.positions = [self.position]
         self.direction = choice([LEFT, RIGHT, UP, DOWN])
