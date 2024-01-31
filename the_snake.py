@@ -21,7 +21,7 @@ APPLE_COLOR = (128, 0, 32)
 
 SNAKE_COLOR = (0, 78, 56)
 
-SPEED = 15
+SPEED = 17
 
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
 
@@ -58,41 +58,54 @@ class GameObject:
         self.position = SCREEN_CENTER
         self.body_color = body_color
         self.border_color = border_color
-        self.border_color = BORDER_COLOR
 
     def draw(self, surface):
         """Preform method for Snake and Apple cls"""
         raise NotImplementedError("this should never happen")
 
-
-def generate_random_position():
-    """Generates random tuple with (X, Y) cords"""
-    return (
-        randint(0, GRID_WIDTH - 1) * GRID_SIZE,
-        randint(0, GRID_HEIGHT - 1) * GRID_SIZE
-    )
+    @staticmethod
+    def display_win_message():
+        font = pg.font.Font(None, 74)
+        text = font.render("YOU WIN", True, (255, 255, 0))
+        text_rect = text.get_rect(center=SCREEN_CENTER)
+        screen.blit(text, text_rect)
+        pg.display.flip()
+        pg.time.wait(5 * 1000)
 
 
 class Apple(GameObject):
     """Game class of 'eatable' apples"""
 
-    fill_apple_debug = 100
-
-    def __init__(self, body_color=None, border_color=None):
+    def __init__(self, body_color=APPLE_COLOR, border_color=BORDER_COLOR):
         """Apple class constructor"""
         super().__init__(body_color, border_color)
-        self.randomize_position([SCREEN_CENTER])
+        self.randomize_position()
 
-    def randomize_position(self, snake_position):
-        """Change current object position into random value"""
-        attempts = 0
-        while attempts < Apple.fill_apple_debug:
-            rand_position = generate_random_position()
-            if (rand_position not in snake_position
-                    and rand_position != SCREEN_CENTER):
-                self.position = rand_position
-                break
-            attempts += 1
+    @staticmethod
+    def generate_random_position():
+        """Generates random tuple with (X, Y) cords"""
+        return (
+            randint(0, GRID_WIDTH) * GRID_SIZE,
+            randint(0, GRID_HEIGHT) * GRID_SIZE
+        )
+
+    def randomize_position(self, snake_positions=None):
+        if snake_positions is None:
+            snake_positions = [SCREEN_CENTER]
+
+        all_positions = [
+            (x, y) for x in range(GRID_WIDTH) for y in range(GRID_HEIGHT)
+        ]
+
+        available_positions = [pos for pos in all_positions if
+                               pos not in snake_positions]
+
+        if available_positions:
+            rand_position = choice(available_positions)
+            self.position = (
+                rand_position[0] * GRID_SIZE, rand_position[1] * GRID_SIZE)
+        else:
+            self.display_win_message()
 
     def draw(self, surface):
         """Draw apple cls object"""
@@ -107,7 +120,7 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Game class of sneaky Sssnake"""
 
-    def __init__(self, body_color=None, border_color=None):
+    def __init__(self, body_color=SNAKE_COLOR, border_color=BORDER_COLOR):
         """Snake class constructor"""
         super().__init__(body_color, border_color)
         self.length = 1
@@ -165,8 +178,8 @@ def main():
     pg.init()
     clock.tick(SPEED)
 
-    apple = Apple(APPLE_COLOR, BORDER_COLOR)
-    snake = Snake(SNAKE_COLOR, BORDER_COLOR)
+    apple = Apple()
+    snake = Snake()
 
     while True:
         clock.tick(SPEED)
