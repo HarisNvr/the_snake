@@ -65,6 +65,7 @@ class GameObject:
 
     @staticmethod
     def display_win_message():
+        """Displays 'YOU WIN' message"""
         font = pg.font.Font(None, 74)
         text = font.render("YOU WIN", True, (255, 255, 0))
         text_rect = text.get_rect(center=SCREEN_CENTER)
@@ -89,16 +90,17 @@ class Apple(GameObject):
             randint(0, GRID_HEIGHT) * GRID_SIZE
         )
 
-    def randomize_position(self, snake_positions=None):
-        if snake_positions is None:
-            snake_positions = [SCREEN_CENTER]
+    def randomize_position(self, occupied_positions=None):
+        """Change current object position into random non-occupied value"""
+        if occupied_positions is None:
+            occupied_positions = [SCREEN_CENTER]
 
         all_positions = [
             (x, y) for x in range(GRID_WIDTH) for y in range(GRID_HEIGHT)
         ]
 
         available_positions = [pos for pos in all_positions if
-                               pos not in snake_positions]
+                               pos not in occupied_positions]
 
         if available_positions:
             rand_position = choice(available_positions)
