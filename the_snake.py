@@ -23,7 +23,7 @@ SNAKE_COLOR = (0, 78, 56)
 
 SPEED = 17
 
-screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
+screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), depth=32)
 
 pg.display.set_caption('Pythot by HarisNvr')
 
@@ -32,6 +32,7 @@ clock = pg.time.Clock()
 
 def handle_keys(game_object):
     """Transform keys pushing into game action"""
+    global SPEED
     for event in pg.event.get():
         if event.type == pg.QUIT:
             pg.quit()
@@ -96,7 +97,8 @@ class Apple(GameObject):
             occupied_positions = [SCREEN_CENTER]
 
         all_positions = [
-            (x, y) for x in range(GRID_WIDTH) for y in range(GRID_HEIGHT)
+            (x * GRID_SIZE, y * GRID_SIZE) for x in range(GRID_WIDTH) for y in
+            range(GRID_HEIGHT)
         ]
 
         available_positions = [pos for pos in all_positions if
@@ -104,8 +106,7 @@ class Apple(GameObject):
 
         if available_positions:
             rand_position = choice(available_positions)
-            self.position = (
-                rand_position[0] * GRID_SIZE, rand_position[1] * GRID_SIZE)
+            self.position = rand_position
         else:
             self.display_win_message()
 
@@ -129,6 +130,7 @@ class Snake(GameObject):
         self.positions = [self.position]
         self.direction = RIGHT
         self.next_direction = None
+        self.head_color = (0, 255, 0)
 
     def update_direction(self):
         """Replace current direction value with new direction value"""
@@ -158,7 +160,7 @@ class Snake(GameObject):
             pg.draw.rect(surface, self.border_color, rect, 1)
 
         head_rect = pg.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
-        pg.draw.rect(surface, self.body_color, head_rect)
+        pg.draw.rect(surface, self.head_color, head_rect)
         pg.draw.rect(surface, self.border_color, head_rect, 1)
 
     def get_head_position(self):
