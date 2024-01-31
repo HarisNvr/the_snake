@@ -1,4 +1,4 @@
-from random import choice, randint
+from random import choice
 
 import pygame as pg
 
@@ -106,8 +106,7 @@ class Apple(GameObject):
                                pos not in occupied_positions]
 
         if available_positions:
-            rand_position = choice(available_positions)
-            self.position = rand_position
+            self.position = choice(available_positions)
         else:
             IF_WIN = True
 
