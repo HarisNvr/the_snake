@@ -53,7 +53,7 @@ def handle_keys(game_object):
 class GameObject:
     """Base game object class"""
 
-    def __init__(self, body_color, border_color):
+    def __init__(self, body_color=None, border_color=None):
         """Parent class constructor"""
         self.position = SCREEN_CENTER
         self.body_color = body_color
@@ -78,7 +78,7 @@ class Apple(GameObject):
 
     fill_apple_debug = 100
 
-    def __init__(self, body_color, border_color):
+    def __init__(self, body_color=None, border_color=None):
         """Apple class constructor"""
         super().__init__(body_color, border_color)
         self.randomize_position([SCREEN_CENTER])
@@ -107,7 +107,7 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Game class of sneaky Sssnake"""
 
-    def __init__(self, body_color, border_color):
+    def __init__(self, body_color=None, border_color=None):
         """Snake class constructor"""
         super().__init__(body_color, border_color)
         self.length = 1
