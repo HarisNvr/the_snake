@@ -7,6 +7,10 @@ SCREEN_CENTER = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
 GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
+ALL_POSITIONS = [
+    (x * GRID_SIZE, y * GRID_SIZE) for x in range(GRID_WIDTH) for
+    y in range(GRID_HEIGHT)
+]
 
 UP = (0, -1)
 DOWN = (0, 1)
@@ -17,11 +21,14 @@ BOARD_BACKGROUND_COLOR = (0, 0, 0)
 
 BORDER_COLOR = (255, 255, 255)
 
-APPLE_COLOR = (128, 0, 32)
+APPLE_COLOR = (255, 0, 0)
 
-SNAKE_COLOR = (0, 78, 56)
+SNAKE_BODY_COLOR = (0, 128, 0)
+SNAKE_HEAD_COLOR = (50, 205, 50)
 
 SPEED = 17
+
+IF_WIN = False
 
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), depth=32)
 
@@ -72,7 +79,13 @@ class GameObject:
         text_rect = text.get_rect(center=SCREEN_CENTER)
         screen.blit(text, text_rect)
         pg.display.flip()
-        pg.time.wait(5 * 1000)
+
+        end_time = pg.time.get_ticks() + 5 * 1000
+        while pg.time.get_ticks() < end_time:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    raise SystemExit
 
 
 class Apple(GameObject):
@@ -83,32 +96,20 @@ class Apple(GameObject):
         super().__init__(body_color, border_color)
         self.randomize_position()
 
-    @staticmethod
-    def generate_random_position():
-        """Generates random tuple with (X, Y) cords"""
-        return (
-            randint(0, GRID_WIDTH) * GRID_SIZE,
-            randint(0, GRID_HEIGHT) * GRID_SIZE
-        )
-
     def randomize_position(self, occupied_positions=None):
         """Change current object position into random non-occupied value"""
+        global IF_WIN
         if occupied_positions is None:
             occupied_positions = [SCREEN_CENTER]
 
-        all_positions = [
-            (x * GRID_SIZE, y * GRID_SIZE) for x in range(GRID_WIDTH) for y in
-            range(GRID_HEIGHT)
-        ]
-
-        available_positions = [pos for pos in all_positions if
+        available_positions = [pos for pos in ALL_POSITIONS if
                                pos not in occupied_positions]
 
         if available_positions:
             rand_position = choice(available_positions)
             self.position = rand_position
         else:
-            self.display_win_message()
+            IF_WIN = True
 
     def draw(self, surface):
         """Draw apple cls object"""
@@ -123,14 +124,14 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Game class of sneaky Sssnake"""
 
-    def __init__(self, body_color=SNAKE_COLOR, border_color=BORDER_COLOR):
+    def __init__(self, body_color=SNAKE_BODY_COLOR, border_color=BORDER_COLOR):
         """Snake class constructor"""
         super().__init__(body_color, border_color)
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
         self.next_direction = None
-        self.head_color = (0, 255, 0)
+        self.head_color = SNAKE_HEAD_COLOR
 
     def update_direction(self):
         """Replace current direction value with new direction value"""
@@ -200,6 +201,9 @@ def main():
 
         snake.update_direction()
         screen.fill(BOARD_BACKGROUND_COLOR)
+
+        if IF_WIN:
+            GameObject.display_win_message()
 
         snake.draw(screen)
         apple.draw(screen)
