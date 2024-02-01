@@ -26,7 +26,7 @@ APPLE_COLOR = (255, 0, 0)
 SNAKE_BODY_COLOR = (0, 128, 0)
 SNAKE_HEAD_COLOR = (50, 205, 50)
 
-SPEED = 17
+BASE_SPEED = 15
 
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), depth=32)
 
@@ -37,7 +37,6 @@ clock = pg.time.Clock()
 
 def handle_keys(game_object):
     """Transform keys pushing into game action"""
-    global SPEED
     for event in pg.event.get():
         if event.type == pg.QUIT:
             pg.quit()
@@ -84,6 +83,7 @@ class GameObject:
                 if event.type == pg.QUIT:
                     pg.quit()
                     raise SystemExit
+        pg.quit()
 
 
 class Apple(GameObject):
@@ -94,16 +94,21 @@ class Apple(GameObject):
         super().__init__(body_color, border_color)
         self.randomize_position()
 
+    @staticmethod
+    def available_positions(occupied_positions):
+        """Checking available positions, that not occupied"""
+        return [pos for pos in ALL_POSITIONS if
+                pos not in occupied_positions]
+
     def randomize_position(self, occupied_positions=None):
         """Change current object position into random non-occupied value"""
         if occupied_positions is None:
             occupied_positions = [SCREEN_CENTER]
 
-        available_positions = [pos for pos in ALL_POSITIONS if
-                               pos not in occupied_positions]
-
-        if available_positions:
-            self.position = choice(available_positions)
+        if self.available_positions(occupied_positions):
+            self.position = choice(
+                self.available_positions(occupied_positions)
+            )
 
     def draw(self, surface):
         """Draw apple cls object"""
@@ -175,13 +180,14 @@ class Snake(GameObject):
 def main():
     """Game body"""
     pg.init()
-    clock.tick(SPEED)
+    clock.tick(BASE_SPEED)
 
     apple = Apple()
     snake = Snake()
 
     while True:
-        clock.tick(SPEED + snake.length // 4)
+        actual_speed = BASE_SPEED + (snake.length // 5)
+        clock.tick(actual_speed)
 
         handle_keys(snake)
         snake.move()
@@ -197,6 +203,10 @@ def main():
         screen.fill(BOARD_BACKGROUND_COLOR)
 
         snake.draw(screen)
+
+        if not apple.available_positions(snake.positions):
+            GameObject.display_win_message()
+
         apple.draw(screen)
 
         pg.display.update()
