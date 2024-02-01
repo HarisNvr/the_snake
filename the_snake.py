@@ -28,8 +28,6 @@ SNAKE_HEAD_COLOR = (50, 205, 50)
 
 SPEED = 17
 
-IF_WIN = False
-
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), depth=32)
 
 pg.display.set_caption('Pythot by HarisNvr')
@@ -98,7 +96,6 @@ class Apple(GameObject):
 
     def randomize_position(self, occupied_positions=None):
         """Change current object position into random non-occupied value"""
-        global IF_WIN
         if occupied_positions is None:
             occupied_positions = [SCREEN_CENTER]
 
@@ -107,8 +104,6 @@ class Apple(GameObject):
 
         if available_positions:
             self.position = choice(available_positions)
-        else:
-            IF_WIN = True
 
     def draw(self, surface):
         """Draw apple cls object"""
@@ -186,7 +181,7 @@ def main():
     snake = Snake()
 
     while True:
-        clock.tick(SPEED)
+        clock.tick(SPEED + snake.length // 4)
 
         handle_keys(snake)
         snake.move()
@@ -200,9 +195,6 @@ def main():
 
         snake.update_direction()
         screen.fill(BOARD_BACKGROUND_COLOR)
-
-        if IF_WIN:
-            GameObject.display_win_message()
 
         snake.draw(screen)
         apple.draw(screen)
