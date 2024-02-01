@@ -96,7 +96,7 @@ class Apple(GameObject):
 
     @staticmethod
     def available_positions(occupied_positions):
-        """Checking available positions, that not occupied"""
+        """Return available positions list"""
         return [pos for pos in ALL_POSITIONS if
                 pos not in occupied_positions]
 
