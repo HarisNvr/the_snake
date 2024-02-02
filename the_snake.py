@@ -105,10 +105,10 @@ class Apple(GameObject):
         if occupied_positions is None:
             occupied_positions = [SCREEN_CENTER]
 
-        if self.available_positions(occupied_positions):
-            self.position = choice(
-                self.available_positions(occupied_positions)
-            )
+        free_pos = self.available_positions(occupied_positions)
+
+        if free_pos:
+            self.position = choice(free_pos)
 
     def draw(self, surface):
         """Draw apple cls object"""
