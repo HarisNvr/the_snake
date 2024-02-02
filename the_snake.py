@@ -121,7 +121,7 @@ class Apple(GameObject):
 
 
 class Snake(GameObject):
-    """Game class of sneaky Sssnake"""
+    """Game class of sneaky Ss-snake"""
 
     def __init__(self, body_color=SNAKE_BODY_COLOR, border_color=BORDER_COLOR):
         """Snake class constructor"""
