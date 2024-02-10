@@ -49,7 +49,7 @@ SCREEN = pg.display.set_mode((PLAYABLE_SCREEN_WIDTH,
                               PLAYABLE_SCREEN_HEIGHT + 100), depth=32)
 
 SCREEN_FILLER = pg.image.load('screen_img.jpg').convert()
-SCOREBOARD_FILLER = pg.image.load('scoreboard_1.png').convert()
+SCOREBOARD_FILLER = pg.image.load('scoreboard.png').convert()
 
 pg.display.set_caption('Pythot by HarisNvr')
 
@@ -210,7 +210,7 @@ def main():
     apple = Apple()
     snake = Snake()
 
-    score_font = pg.font.Font('Lordcorps[RUSbyPenka220]-Stencil.ttf', 36)
+    score_font = pg.font.Font('Billabong Cyr.ttf', 40)
 
     while True:
         actual_speed = BASE_SPEED + SPEED_MODIFIERS[
@@ -238,8 +238,8 @@ def main():
 
         SCREEN.blit(SCREEN_FILLER, (0, 0))
         SCREEN.blit(SCOREBOARD_FILLER, (0, 480))
-        SCREEN.blit(score, (25, 507))
-        SCREEN.blit(speed, (450, 507))
+        SCREEN.blit(score, (47, 512))
+        SCREEN.blit(speed, (460, 512))
 
         snake.draw_full_snake(SCREEN)
 
