@@ -82,8 +82,8 @@ def test_snake_attributes(snake, attr_type, attr_name):
 
 
 EXPECTED_MODULE_ELEMENTS = (
-    ('константа', 'SCREEN_WIDTH'),
-    ('константа', 'SCREEN_HEIGHT'),
+    ('константа', 'PLAYABLE_SCREEN_WIDTH'),
+    ('константа', 'PLAYABLE_SCREEN_HEIGHT'),
     ('константа', 'GRID_SIZE'),
     ('константа', 'GRID_WIDTH'),
     ('константа', 'GRID_HEIGHT'),
@@ -92,7 +92,7 @@ EXPECTED_MODULE_ELEMENTS = (
     ('константа', 'DOWN'),
     ('константа', 'LEFT'),
     ('константа', 'RIGHT'),
-    ('переменная', 'screen'),
+    ('переменная', 'SCREEN'),
     ('переменная', 'clock'),
     ('функция', 'main'),
     ('функция', 'handle_keys'),
@@ -114,7 +114,7 @@ def test_elements_exist(element_type, element_name):
 @pytest.mark.parametrize(
     'expected_type, var_name',
     (
-        (pygame.Surface, 'screen'),
+        (pygame.Surface, 'SCREEN'),
         (pygame.time.Clock, 'clock'),
     ),
 )

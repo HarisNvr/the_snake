@@ -10,7 +10,7 @@ import pytest_timeout
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 sys.path.append(str(BASE_DIR))
 
-# Hide the pygame screen
+# Hide the pygame SCREEN
 os.environ['SDL_VIDEODRIVER'] = 'dummy'
 
 try:
