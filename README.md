@@ -8,27 +8,27 @@
 - Убедитесь, что у вас установлен Python 3.6 или новее
 - Склонируйте репозиторий:
 ```
-$ git clone https://github.com/HarisNvr/the_snake.git
+git clone https://github.com/HarisNvr/the_snake.git
 ```
 - Перейдите в директорию проекта:
 ```
-$ cd the_snake
+cd the_snake
 ```
 - Создайте и активируйте виртуальное окружение:
 ```
-$ python -m venv venv
-$ source venv/bin/activate
+python -m venv venv
+source venv/bin/activate
 ```
 - Установите зависимости:
 ```
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Использование
 
 - Запустите игру:
 ```
-$ python the_snake.py
+python the_snake.py
 ```
 
 ## Скорость игры:
