@@ -14,6 +14,11 @@ $ git clone https://github.com/HarisNvr/the_snake.git
 ```
 $ cd the_snake
 ```
+- Создайте и активируйте виртуальное окружение:
+```
+$ python -m venv venv
+$ source venv/bin/activate
+```
 - Установите зависимости:
 ```
 $ pip install -r requirements.txt
